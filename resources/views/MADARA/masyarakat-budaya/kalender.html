@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Kalender dengan Efek Air dan Cahaya</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .calendar {
+            background-color: #fff;
+            width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .calendar:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .month ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .month ul li {
+            cursor: pointer;
+            font-size: 20px;
+            transition: color 0.3s ease;
+            color: #007bff; /* warna biru */
+        }
+
+        .month ul li:hover {
+            color: #0056b3; /* warna biru lebih gelap saat hover */
+        }
+
+        .weekdays {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .weekdays li {
+            width: calc(100% / 7);
+            font-weight: bold;
+            color: #6c757d;
+        }
+
+        .days {
+            list-style-type: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+
+        .days li {
+            padding: 10px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .days li:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .splash {
+            position: absolute;
+            background-color: rgba(0, 123, 255, 0.6); /* biru dengan opacity */
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            animation: splash 0.7s ease;
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        @keyframes splash {
+            0% {
+                transform: scale(0);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        .background-effect {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+            background-image: radial-gradient(circle, rgba(196, 171, 255, 0.5) 10%, rgba(255, 207, 172, 0.5) 70%);
+            animation: background-glow 1.5s infinite alternate;
+            opacity: 0;
+            border-radius: 50%;
+        }
+
+        @keyframes background-glow {
+            0% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        .prev, .next {
+            cursor: pointer;
+            font-size: 20px;
+            transition: transform 0.3s ease, color 0.3s ease;
+            color: #007bff; /* warna biru */
+        }
+
+        .prev:hover, .next:hover {
+            color: #0056b3; /* warna biru lebih gelap saat hover */
+            transform: scale(1.1);
+        }
+
+        .month-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff; /* warna biru */
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .month-name span {
+            display: block;
+        }
+
+        .day-num {
+            font-size: 18px;
+        }
+
+        .event {
+            background-color: #28a745;
+            color: white;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-top: 5px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="calendar">
+        <div class="month">
+            <ul>
+                <li class="prev">&#10094;</li>
+                <li class="month-name">
+                    <span id="month"></span><br>
+                    <span id="year"></span>
+                </li>
+                <li class="next">&#10095;</li>
+            </ul>
+        </div>
+        <ul class="weekdays">
+            <li>Sen</li>
+            <li>Sel</li>
+            <li>Rab</li>
+            <li>Kam</li>
+            <li>Jum</li>
+            <li>Sab</li>
+            <li>Ming</li>
+        </ul>
+        <ul class="days" id="days"></ul>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentDate = new Date();
+            let year = currentDate.getFullYear();
+            let month = currentDate.getMonth();
+            const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+
+            const monthText = document.getElementById("month");
+            const yearText = document.getElementById("year");
+            const daysList = document.getElementById("days");
+
+            function generateCalendar() {
+                monthText.textContent = months[month];
+                yearText.textContent = year;
+
+                let days = "";
+                const firstDay = new Date(year, month, 1);
+                const lastDay = new Date(year, month + 1, 0);
+
+                let startDay = firstDay.getDay();
+                let endDate = lastDay.getDate();
+
+                for (let i = 0; i < startDay; i++) {
+                    days += "<li></li>";
+                }
+
+                for (let day = 1; day <= endDate; day++) {
+                    days += <li>${day}</li>;
+                }
+
+                daysList.innerHTML = days;
+            }
+
+            generateCalendar();
+
+            document.querySelector('.prev').addEventListener('click', function() {
+                if (month === 0) {
+                    month = 11;
+                    year--;
+                } else {
+                    month--;
+                }
+                generateCalendar();
+            });
+
+            document.querySelector('.next').addEventListener('click', function() {
+                if (month === 11) {
+                    month = 0;
+                    year++;
+                } else {
+                    month++;
+                }
+                generateCalendar();
+            });
+
+            // Menambahkan efek air saat hover pada tanggal
+            const days = document.querySelectorAll('.days li');
+            days.forEach(day => {
+                day.addEventListener('mouseenter', function() {
+                    const splash = document.createElement('span');
+                    splash.classList.add('splash');
+                    day.appendChild(splash);
+
+                    setTimeout(() => {
+                        splash.remove();
+                    }, 700);
+                });
+            });
+
+            // Menambahkan efek cahaya pada latar belakang saat kursor bergerak
+            const calendar = document.querySelector('.calendar');
+
+            calendar.addEventListener('mousemove', function(event) {
+                const x = event.pageX - event.target.offsetLeft;
+                const y = event.pageY - event.target.offsetTop;
+
+                const effect = document.createElement('div');
+                effect.classList.add('background-effect');
+                effect.style.left = ${x}px;
+                effect.style.top = ${y}px;
+
+                calendar.appendChild(effect);
+
+                setTimeout(() => {
+                    effect.remove();
+                }, 1500); // Adjust the duration as needed
+            });
+        });
+    </script>
+</body>
+</html>

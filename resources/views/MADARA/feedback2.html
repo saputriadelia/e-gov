@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Berhasil</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background-color: #f8f8f8;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .header .left-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .header .logo img {
+            height: 50px;
+        }
+
+        .header .title {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            margin-left: 20px;
+        }
+
+        .header .title h1, .header .title h2 {
+            margin: 0;
+        }
+
+        .header .title h1 {
+            font-size: 20px;
+            font-weight: normal;
+            text-align: left;
+        }
+
+        .header .title h2 {
+            font-size: 14px;
+            font-weight: normal;
+            color: #777;
+            text-align: left;
+        }
+
+        .header .login-link {
+            margin-left: auto;
+        }
+
+        .header .beranda-button {
+            text-decoration: none;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+        }
+
+        .content-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            text-align: center;
+        }
+
+        .feedback-box {
+            background: white;
+            padding: 50px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 60%;
+        }
+
+        .feedback-box h2 {
+            margin-bottom: 10px;
+        }
+
+        .feedback-box p {
+            margin-bottom: 20px;
+            color: #777;
+        }
+
+        .feedback-box button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .feedback-box button:hover {
+            background-color: #0056b3;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #004d7f;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .footer-pattern {
+            height: 50px;
+            background-image: url('path_to_footer_pattern_image');
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="left-container">
+            <div class="logo">
+                <img src="assets/img/logo.png" alt="Logo">
+            </div>
+            <div class="title">
+                <h1>Pemerintah Kota Malang</h1>
+                <h2>Dashboard E-Gov | Malang Dashboard Radar V.1</h2>
+            </div>
+        </div>
+        <div class="login-link">
+            <a class="beranda-button" href="index.html">Beranda</a>
+        </div>
+    </div>
+    <div class="content-container">
+        <div class="feedback-box">
+            <h2>Feedback Anda berhasil diunggah!</h2>
+            <p>Terima kasih atas partisipasi Anda dalam memberikan feedback! Kontribusi Anda sangat berarti bagi kami dalam terus meningkatkan layanan e-Government untuk kebaikan bersama.</p>
+            <br>
+            <button onclick="location.href='feedback.html'">Ingin menambahkan feedback lagi?</button>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="footer-pattern"></div>
+    </div>
+</body>
+</html>
